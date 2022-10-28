@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <ArduinoMqttClient.h>
 #include <ESP8266WiFi.h>
+#include <exception>
 
 
 #define FAILED_WIFI_RESET 10
@@ -66,7 +67,7 @@ void Communication_Manager::check_wifi_connection()
 		connect_wifi(false);
 	}
 	if(failedWifiConsecutive>FAILED_WIFI_RESET) {
-		ESP.restart();
+		throw std::runtime_error("Failed to connect to Wifi to many times");
 	}
 }
 
@@ -88,7 +89,7 @@ void Communication_Manager::check_mqtt_connection()
 	}
 
 	if(failedMqttConsecutive>FAILED_MQTT_RESET) {
-		ESP.restart();
+		throw std::runtime_error("Failed to connect to MQTT to many times");
 	}
 }
 
